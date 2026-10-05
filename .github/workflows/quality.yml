@@ -1,0 +1,41 @@
+name: Quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile application
+        run: python -m py_compile app.py
+
+      - name: Verify committed knowledge-base checksums
+        shell: python
+        run: |
+          from hashlib import sha256
+          from pathlib import Path
+
+          expected = {
+              "index.faiss": "efd1495cd5c40bd13c5cee048b811f15fe0534ab54d995d8fa48b9c37c378b77",
+              "index.pkl": "9e6877a6db976345802f138e8ed17eb795f997722d1ffb5d8b78c61fac0cccc1",
+          }
+          for name, digest in expected.items():
+              actual = sha256((Path("faiss_index") / name).read_bytes()).hexdigest()
+              if actual != digest:
+                  raise SystemExit(f"Checksum mismatch: {name}")

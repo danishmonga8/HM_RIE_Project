@@ -1,8 +1,17 @@
 # 🌧️ Hydro-Meteorological AI Research Assistant
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+
 This repository contains a Retrieval-Augmented Generation (RAG) based AI assistant specifically designed for hydro-meteorological research, focusing on moisture-driven landslides, spatial interpolation methods, and complex terrain modeling. 
 
 The project allows users to query a large corpus of scientific literature and receive highly technical, citation-backed answers without AI hallucination.
+
+> **Security note:** The included FAISS document store uses Python pickle
+> deserialization. Run it only from a trusted, unmodified checkout and never
+> replace the index with files from an untrusted source. See the security notes
+> below before starting the application.
 
 ## 🏗️ Project Architecture
 
@@ -32,3 +41,14 @@ Ensure you have Python installed and your OpenAI API key ready.
 2. Install the required dependencies:
    ```bash
    pip install streamlit langchain langchain-openai langchain-community faiss-cpu tiktoken
+
+## Security and responsible use
+
+- Treat `faiss_index/index.pkl` as executable content because loading a pickle
+  can run code. Use only the version committed in a trusted checkout.
+- Enter API keys only in the local Streamlit password field. Never commit keys,
+  place them in screenshots, or share them in issues.
+- Generated answers are research assistance, not a substitute for checking the
+  cited paper. Verify quotations, values, and methodological claims at source.
+- Confirm that you have the necessary rights to store and redistribute any
+  literature added to the index.
